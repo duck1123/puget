@@ -13,7 +13,7 @@
             [lein-cloverage "1.0.2"]
             [lein-marginalia "0.8.0"]]
 
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.7.0-alpha5"]
                  [org.clojure/data.codec "0.1.0"]
                  [fipp "0.5.2"]]
 
