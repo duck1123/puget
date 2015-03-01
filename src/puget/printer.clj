@@ -26,7 +26,7 @@
   `:strict`
   If true, throw an exception if there is no canonical EDN representation for
   a given value. This generally applies to any non-primitive value which does
-  not extend puget.data/TaggedValue and is not a built-in collection.
+  not extend `puget.data/ExtendedNotation` and is not a built-in collection.
 
   `:map-delimiter`
   The text placed between key-value pairs in a map.
