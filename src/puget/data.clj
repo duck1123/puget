@@ -8,56 +8,21 @@
 
 
 (defprotocol ExtendedNotation
-  "Protocol for types which use extended notation for EDN representation."
+  "Protocol for types which use tagged-literal notation for EDN
+  representation."
 
   (->edn
     [value]
-    "Converts the given value into a tagged value representation for EDN
-    serialization. Returns a `TaggedLiteral` record."))
+    "Converts the given value into a tagged literal representation for EDN
+    serialization. Should return a `clojure.core.TaggedLiteral` object."))
 
 
-(defrecord TaggedLiteral
-  [tag form]
-
+(extend-type clojure.core.TaggedLiteral
   ExtendedNotation
 
   (->edn
     [this]
-    this)
-
-
-  Object
-
-  (toString
-    [this]
-    (str \# tag \space (pr-str form))))
-
-
-(defmethod print-method TaggedLiteral
-  [v ^java.io.Writer w]
-  (.write w (str v)))
-
-
-(defn tagged-literal
-  "Creates a generic tagged value record to represent some EDN value. This is
-  suitable for use as a default-data-reader function."
-  [tag value]
-  {:pre [(symbol? tag)]}
-  (->TaggedLiteral tag value))
-
-
-(defn tagged-literal?
-  "Returns true if the given value is a tagged-literal form."
-  [value]
-  (instance? TaggedLiteral value))
-
-
-(defn edn-str
-  "Converts the given value to a tagged EDN string. Falls back to `pr-str` if
-  `v` does not use extended notation."
-  ^String
-  [v]
-  (pr-str (if (satisfies? ExtendedNotation v) (->edn v) v)))
+    this))
 
 
 
