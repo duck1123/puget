@@ -1,9 +1,6 @@
 (ns puget.data
   "Code to handle custom data represented as tagged EDN values."
-  (:require
-    [clojure.data.codec.base64 :as b64])
   (:import
-    (java.net URI)
     (java.util Date TimeZone UUID)))
 
 
@@ -57,7 +54,7 @@
 
 
 
-;; ## Basic EDN Types
+;; ## Built-in EDN Types
 
 (defn- format-utc
   "Produces an ISO-8601 formatted date-time string from the given Date."
@@ -71,33 +68,5 @@
 ;; `inst` tags a date-time instant represented as an ISO-8601 string.
 (extend-notation Date 'inst format-utc)
 
-
 ;; `uuid` tags a universally-unique identifier string.
 (extend-str-notation UUID 'uuid)
-
-
-;; `puget/bin` tags byte data represented as a base64-encoded string.
-(extend-notation
-  (class (byte-array 0))
-  'puget/bin
-  #(->> % b64/encode (map char) (apply str)))
-
-
-(defn read-bin
-  "Reads a base64-encoded string into a byte array. Suitable as a data-reader
-  for `puget/bin` literals."
-  ^bytes
-  [^String bin]
-  (b64/decode (.getBytes bin)))
-
-
-;; `puget/uri` tags a Universal Resource Identifier string.
-(extend-str-notation URI 'puget/uri)
-
-
-(defn read-uri
-  "Constructs a URI from a string value. Suitable as a data-reader for
-  `puget/uri` literals."
-  ^URI
-  [^String uri]
-  (URI. uri))
